@@ -7,7 +7,7 @@ Telegram bot uses group chat title to countdown
 1. Click use this template at the top right.
 2. Config title of group chat at `.github/workflows/telegram-countdown.yml`.
 3. Config variables in GitHub secrets
-    - `TELEGRAM_TARGET_DATE`: Date to countdown to, in format `YYYY-MM-DD HH:MM:SS` (UTC).
+    - `TELEGRAM_TARGET_DATE`: Date to countdown to, in format `YYYY-MM-DD` (UTC).
     - `TELEGRAM_BOT_TOKEN`: Bot token from BotFather.
     - `TELEGRAM_CHAT_ID`: Chat ID of the group chat.
 4. Add bot to group chat.
