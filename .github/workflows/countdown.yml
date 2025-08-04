@@ -1,0 +1,30 @@
+name: Update Telegram Countdown
+
+on:
+  schedule:
+    # Runs every day at 16:00 UTC (which is 00:00 in UTC+8)
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-title:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Calculate countdown and update Telegram group title
+        run: |
+          #!/bin/bash
+          set -e
+
+          # Get current date in UTC+8
+          TODAY=$(TZ=Asia/Taipei date +%s)
+          TARGET=$(date -d "${{ secrets.TELEGRAM_TARGET_DATE }}" +%s)
+          DAYS_LEFT=$(( (TARGET - TODAY) / 86400 ))
+
+          TITLE="🔥 Countdown: $DAYS_LEFT days left"
+
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/setChatTitle \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d title="$TITLE"
+
+        shell: bash
