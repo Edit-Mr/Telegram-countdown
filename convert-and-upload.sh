@@ -33,15 +33,15 @@ WIDTH=$(identify -format "%w" "$IMG")
 COLOR_HEIGHT=$(( HEIGHT * PERCENT / 100 ))
 
 # Process image
-magick "$IMG" \
+convert "$IMG" \
   -gravity North -crop "${WIDTH}x$(( HEIGHT - COLOR_HEIGHT ))+0+0" +repage \
   -colorspace Gray "top.jpg"
 
-magick "$IMG" \
+convert "$IMG" \
   -gravity South -crop "${WIDTH}x${COLOR_HEIGHT}+0+0" +repage \
   "bottom.jpg"
 
-magick top.jpg bottom.jpg -append "$OUT"
+convert top.jpg bottom.jpg -append "$OUT"
 
 TITLE="SITCON 2026 工人大群 | 倒數 $LEFT 天"
 
