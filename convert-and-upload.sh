@@ -45,8 +45,8 @@ convert top.jpg bottom.jpg -append "$OUT"
 
 TITLE="SITCON 2026 工人大群 | 倒數 $LEFT 天"
 
-curl -s -X POST https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/setChatTitle \
-  -d chat_id=${{ secrets.CHAT_ID }} \
+curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/setChatTitle \
+  -d chat_id=$CHAT_ID \
   -d title="$TITLE"
 
 # Upload
