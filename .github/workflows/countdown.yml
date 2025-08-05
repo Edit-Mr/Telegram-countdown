@@ -1,39 +1,25 @@
-name: Update Telegram Countdown
+name: Update Telegram Countdown + Photo
 
 on:
-  schedule:
-    # Runs every day at 16:00 UTC (which is 00:00 in UTC+8)
-    - cron: '0 16 * * *'
-  workflow_dispatch:
-
+    schedule:
+        - cron: "0 16 * * *" # midnight UTC+8
+    workflow_dispatch:
 jobs:
-  update-title:
-    runs-on: ubuntu-latest
+    update:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Calculate countdown and update Telegram group title
-        run: |
-          #!/bin/bash
-          set -e
+        steps:
+            - uses: actions/checkout@v4
 
-          # Get current date in UTC+8
-          TODAY=$(TZ=Asia/Taipei date +%s)
-          TARGET=$(date -d "${{ secrets.TELEGRAM_TARGET_DATE }}" +%s)
-          DAYS_LEFT=$(( (TARGET - TODAY) / 86400 ))
+            - name: Install ImageMagick
+              run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-          TITLE="🔥 Countdown: $DAYS_LEFT days left"
-
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/setChatTitle \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d title="$TITLE"
-
-        shell: bash
-      - name: Run Countdown + Update
-        env:
-          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TARGET_DATE: ${{ secrets.TELEGRAM_TARGET_DATE }}
-          START_DATE: '2025-07-13'  # Or use secret/env if dynamic
-        run: |
-          chmod +x ./convert-and-upload.sh
-          ./convert-and-upload.sh
+            - name: Run Countdown + Update
+              env:
+                  BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+                  CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+                  START_DATE: ${{ secrets.TELEGRAM_START_DATE }}
+                  TARGET_DATE: ${{ secrets.TELEGRAM_TARGET_DATE }}
+              run: |
+                  chmod +x ./convert-and-upload.sh
+                  ./convert-and-upload.sh
